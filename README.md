@@ -9,7 +9,7 @@ Toda la informacion utilizada en este proceso fue suministrada por la pagina ofi
 
  Antes de realizar cualquier manipulacion del firmware original de las impresoras ([Marlin](https://github.com/MarlinFirmware/Marlin)), es recomendable realizar/obtener una copia del mismo por cuestiones de seguridad. 
 
- Tener preparado un dispositivo capaz de correr una distribucion de Linux cualquiera, esta a su vez debe de ser capaz de correr Python 3.8 (sujeto a modificaciones segun Klipper, en un futuro puede ser alguna version mas nueva). Esta distribción se justa a limitaciones del dispositivo que lave a ejecutar o gusto de la persona.
+ Tener preparado un dispositivo capaz de correr una distribucion de Linux cualquiera, esta a su vez debe de ser capaz de correr Python 3.8 (sujeto a modificaciones segun Klipper, en un futuro puede ser alguna version mas nueva). Esta distribción se justa a limitaciones del dispositivo (hardware) o gusto de la persona.
 
 Hasta el momento no hay requisitos mínimos muy claros, pero segun experimentos hechos de forma autónoma para ejecutar una sola interfaz (1 dispositivo, 1 impresora) debe ser un sistema que tenga las siguientes especificaciones:
 
@@ -60,6 +60,9 @@ Dentro de ésta, se accede a la pestaña de "Configuración" y se procede a modi
 
 La configuracion de la impresora depende pura y exclusivamente de la placa, el procesador y el modelo de la impresora. Con el pasar de los años se encuentran muchas configuraciones gratuitas disponibles en el repositorio de Klipper o en foros.
 
+> [!WARNING]
+> NINGUNA DE LAS CONFIGURACIONES PRESENTA EL AJUSTE DEL Z_OFFSET, SE DEBE HACER POSTERIORMENTE, PUEDE VARIAR ENTRE IMPRESORA POR MÁS QUE SEAN LA MISMA.
+
 Lo que importan de éstas son el seteo de pines para los movimientos de los ejes, sensores de temperatura, flujo del extrusor, etc.
 
 Lo que se debe configurar dependiendo la impresora son las dimensiones, estas estan escritas en mm.
@@ -67,14 +70,41 @@ Lo que se debe configurar dependiendo la impresora son las dimensiones, estas es
 > [!NOTE]
 > Antes de realizar cualquier moviemiento de ejes, configurar dimensiones y probar moviendo uno a la vez. En caso de mal movimiento, presionar el boton de "frenado" que se encuentra en la esquina superior derecha
 
-Si se aprecia que todo se encuentra correctamente funcionando y no se presentan errores, Klipper ya se encuentrar funcionando.
+Si se aprecia que todo se encuentra correctamente funcionando y no se presentan errores, Klipper esta listo para utilización.
 
 ## 3. Calibración
 
-Por lo general esto se hace 1 sola vez, se puede hacer mas veces en casos de mantenimiento o cuando se considere conveniente.
+Por lo general esto se hace 1 sola vez, se puede hacer más veces en casos de mantenimiento o cuando se considere conveniente.
 
 La calibración depende del tipo de impresora y si presenta sensor o no. Existe la opción de calibracion en su pestaña propia y se puede apreciar un grafico de desnivel en las coordenadas que se toma valor de distancia del z_offset (que tecnicamente es el desface del z_endstop).
 
-En el caso de las D01, no tienen sensor, por lo que no se puede apreciar dicho grafico y se hace el "paper test" mencionado en la pagina de Klipper y como mucho, en casos de desniveles muy grotescos, se ajustan los tornillos debajo de la cama segun requiera.
+En el caso de las D01, no tienen sensor, por lo que se hace el "paper test" mencionado en la pagina de Klipper.
 
-Para la X5SA, se puede hacer el paper test pero debido a las dimensiones es mejor realizar un ajuste manual mediante "probe", ya que esta si presenta sensor y ajustar los tornillos segun el desfazaje que muestre el grafico.
+Para realizar el ajuste de tornillos, se debe configurar en la seccion [bed_screws] de la cfg de la impresora, las coordenadas XY de los tornillos; para obtener dichas coordenadas, se mueve el cabezal manualmente desde la interfaz de Klipper y se deja la punta del extrusor lo más cercano posible sobre la punta del tornillo en la cama, se repite el proceso con cada tornillo, se debe empezar por el de abajo-izquierda (screw1) y anotarlos en sentido antihorario.
+
+Posteriormente se ejecuta la accion BED_SCREWS_ADJUST desde consola o desde la seccion "tools" del cabezal en la interaz de Klipper y se realiza el "paper test" en cada tornillo ajustándolo para que cumpla con la condición de dicho test, que haya un fricción mínima, luego de ajustarlos se realiza el paper test en el centro de la cama con el comando Z_ENDSTOP_CALIBRATE.
+
+Para la X5SA, se puede hacer el paper test pero como ésta sí tiene un sensor, se realiza la calibración mediante PROBE_CALIBRATE (recordar acomodar bien los screws) en consola y posteriormente se hace un "paper test" en el centro.
+
+# 4. Macros
+
+Lo más destacable que tiene Klipper, es la creación de macros a traves de G-Code y el sistema de programación de Jinja2 (que ofrece seteo de variables, condicionales y demás utilidades para trabajar con macros).
+
+Esta sección no esta muy explorada por parte de la cátedra y los alumnos, ya que lleva demasiado tiempo y requiere indagar en ambas tecnologías mencionadas.
+
+Gran parte, por no decir todas las macros, ya existen o tienen algun parecido con otra, generalmente se buscan y se editan según necesidad. Recalco revisar bien la sección de [macros](https://www.klipper3d.org/Command_Templates.html) aunque no es muy explicativa, da una tentativa de inicio al mundo.
+
+Lo único realizado hasta el momento, son modificaciones de las funciones PAUSE, RESUME y CANCEL_PRINT, para que si en algún momento hay que pausar la impresión o si la impresora se queda sin filamento el cabezal se mueva a una coordenada segura, se apague el hotend y se mantenga prendida la cama.
+
+Existen carpetas de macros como [esta](https://github.com/jschuh/klipper-macros) que se pueden implementar en cierto caso.
+
+# 5. Extras y trabajo a futuro
+
+Como trabajo para próximos meses/años queda:
+
+- Mantenimiento de este repositorio.
+- Revisar las cfgs de las impresoras, ya que al hacerlas en "poco tiempo" puede que haya código extra que no tenga utilidad alguna o que ciertos parametros esten mal puestos (más que todo tema dimensiones de cama).
+- Testear el manejo de varias impresoras con 1 sola PC (hasta el momento estamos limitados por hardware).
+- Aprender G-Code y Jinja2 para desarrollo de macros interesantes para el entorno (quizás alguna para la extrusión).
+- Continuación del trabajo presentado a CONAIISI 2024 sobre Eficiencia de Klipper para la Fabricación Aditiva, ya sea con mejores testeos (figuras mas complejas, distintos tamaños) o uso de distintos filamentos, ya que hasta el momento no hemos probado con estructuras más complejas (muchas curvas, curvas muy cerradas o diseños raros/no convencionales como figuras no uniformes).
+- Relacionado a puntos anteriores, se podría desarrollar un trabajo sobre eficiencia en relación a hardware, ver si es un factor limitante o no en la velocidad o calidad de la impresión, testear con 1 interfaz vs +2, etc.
