@@ -1,25 +1,27 @@
 # Documentación de Klipper en UTN FRRo
 
 
-Este repositorio tiene la intencion de establecer la documentacion pertinente a la instalación, configuracion y guia de uso del firmware Klipper en las impresoras 3D de la universidad.
+Este repositorio tiene la intención de establecer la documentación pertinente a la instalación, configuración y guía de uso del firmware Klipper en las impresoras 3D de la UTN-FRRo.
 
-Toda la informacion utilizada en este proceso fue suministrada por la pagina oficial de [Klipper](https://www.klipper3d.org/), su [repositorio](https://github.com/Klipper3d/klipper) y distintos foros públicos como [Reddit](https://www.reddit.com/r/klippers/) y la [Wiki](https://tronxy.fandom.com/wiki/Installing_Klipper) de Tronxy para instalar Klipper.
+Toda la información utilizada en este proceso fue suministrada por la página oficial de [Klipper](https://www.klipper3d.org/), su [repositorio](https://github.com/Klipper3d/klipper) y distintos foros públicos como [Reddit](https://www.reddit.com/r/klippers/) y la [Wiki](https://tronxy.fandom.com/wiki/Installing_Klipper) de Tronxy para instalar Klipper.
 
 ## 0. Información previa
 
- Antes de realizar cualquier manipulacion del firmware original de las impresoras ([Marlin](https://github.com/MarlinFirmware/Marlin)), es recomendable realizar/obtener una copia del mismo por cuestiones de seguridad. 
+ Antes de realizar cualquier manipulación del firmware original de las impresoras ([Marlin](https://github.com/MarlinFirmware/Marlin)), es recomendable realizar/obtener una copia del mismo por cuestiones de seguridad. 
 
- Tener preparado un dispositivo capaz de correr una distribucion de Linux cualquiera, esta a su vez debe de ser capaz de correr Python 3.8 (sujeto a modificaciones segun Klipper, en un futuro puede ser alguna version mas nueva). Esta distribción se justa a limitaciones del dispositivo (hardware) o gusto de la persona.
+ Tener preparado un dispositivo capaz de correr una distribución de Linux cualquiera, esta a su vez debe de ser capaz de correr Python 3.8 (sujeto a modificaciones segun Klipper, en un futuro puede ser alguna version mas nueva). Esta distribción se justa a limitaciones del dispositivo (hardware) o gusto de la persona.
 
-Hasta el momento no hay requisitos mínimos muy claros, pero segun experimentos hechos de forma autónoma para ejecutar una sola interfaz (1 dispositivo, 1 impresora) debe ser un sistema que tenga las siguientes especificaciones:
+Hasta el momento no hay requisitos mínimos muy claros, pero según experimentos hechos de forma autónoma para ejecutar una sola interfaz (1 dispositivo, 1 impresora) debe ser un sistema que tenga las siguientes especificaciones:
 
 - Arquitectuta x86_64 o x64
 - Procesador de 2 núcleos
 - 2GB de ram DDR3
 
-Tambien tener cable para realizar la conexion entre la impresora y el dispositivo.
+También tener cable para realizar la conexión entre la impresora y el dispositivo.
 
 Cabe aclarar que se menciona "dispositivo" porque es posible correrlo en un dispositivo Android.
+
+Tener un mínimo conocimiento del manejo en sistemas Linux, sobre todo el uso de la terminal.
 
 
 ## 1. Instalación
@@ -82,11 +84,11 @@ En el caso de las D01, no tienen sensor, por lo que se hace el "paper test" menc
 
 Para realizar el ajuste de tornillos, se debe configurar en la seccion [bed_screws] de la cfg de la impresora, las coordenadas XY de los tornillos; para obtener dichas coordenadas, se mueve el cabezal manualmente desde la interfaz de Klipper y se deja la punta del extrusor lo más cercano posible sobre la punta del tornillo en la cama, se repite el proceso con cada tornillo, se debe empezar por el de abajo-izquierda (screw1) y anotarlos en sentido antihorario.
 
-Posteriormente se ejecuta la accion BED_SCREWS_ADJUST desde consola o desde la seccion "tools" del cabezal en la interaz de Klipper y se realiza el "paper test" en cada tornillo ajustándolo para que cumpla con la condición de dicho test, que haya un fricción mínima, luego de ajustarlos se realiza el paper test en el centro de la cama con el comando Z_ENDSTOP_CALIBRATE.
+Posteriormente se ejecuta la acción BED_SCREWS_ADJUST desde consola o desde la seccion "tools" del cabezal en la interaz de Klipper y se realiza el "paper test" en cada tornillo ajustándolo para que cumpla con la condición de dicho test, que haya un fricción mínima, luego de ajustarlos se realiza el paper test en el centro de la cama con el comando Z_ENDSTOP_CALIBRATE.
 
 Para la X5SA, se puede hacer el paper test pero como ésta sí tiene un sensor, se realiza la calibración mediante PROBE_CALIBRATE (recordar acomodar bien los screws) en consola y posteriormente se hace un "paper test" en el centro.
 
-# 4. Macros
+## 4. Macros
 
 Lo más destacable que tiene Klipper, es la creación de macros a traves de G-Code y el sistema de programación de Jinja2 (que ofrece seteo de variables, condicionales y demás utilidades para trabajar con macros).
 
@@ -94,11 +96,15 @@ Esta sección no esta muy explorada por parte de la cátedra y los alumnos, ya q
 
 Gran parte, por no decir todas las macros, ya existen o tienen algun parecido con otra, generalmente se buscan y se editan según necesidad. Recalco revisar bien la sección de [macros](https://www.klipper3d.org/Command_Templates.html) aunque no es muy explicativa, da una tentativa de inicio al mundo.
 
-Lo único realizado hasta el momento, son modificaciones de las funciones PAUSE, RESUME y CANCEL_PRINT, para que si en algún momento hay que pausar la impresión o si la impresora se queda sin filamento el cabezal se mueva a una coordenada segura, se apague el hotend y se mantenga prendida la cama.
+Lo único realizado hasta el momento, son modificaciones de las funciones PAUSE, RESUME y CANCEL_PRINT, para que si en algún momento hay que pausar la impresión o si la impresora se queda sin filamento el cabezal se mueva a una coordenada segura, se apague el hotend y se mantenga prendida la cama por 10 dias, para que haya suficiente tiempo en cambiar filamente/resolver problema si llega a haber paros o cualquier inconveniente con la universidad que imposibilite ir.
 
 Existen carpetas de macros como [esta](https://github.com/jschuh/klipper-macros) que se pueden implementar en cierto caso.
 
-# 5. Extras y trabajo a futuro
+## 5. Extras y trabajo a futuro
+
+Ante cualquier futura modificación o trabajo que requiera el conocimiento de los pines, pueden utilizar esta [imagen](pinmap_STM32F446.jpg) adjuntada en el repositorio; aunque generalmente la solución esta en algún foro, es útil para algún caso en específico.
+
+Cualquier modificación a este repositorio o dudas sobre Klipper, comunicarse con José Ignacio Stassi (joseignaciostassi@gmail.com).
 
 Como trabajo para próximos meses/años queda:
 
