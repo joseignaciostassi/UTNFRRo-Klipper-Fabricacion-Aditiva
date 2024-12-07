@@ -104,6 +104,9 @@ Desde la sección "Tool" en la parte que yo describo como "hotend panel" se debe
 ![hotend_panel](./images/hotend_panel.png)
 
 > [!NOTE]
+> Recordar de dejar la temperatura tal como se puso, ya que al reanudar la impresión, el movimiento para continuar es instanteo y la impresora automaticamente va a actualizar su temperatura a una previamente guardada desde que se quedó sin filamento o se realizó una pausa.
+
+> [!NOTE]
 > A futuro se podria hacer una macro de esto pero lo considero medio innecesario ya que desde la interfaz en general puedo ajustar la retracción/extrusión a medida según necesite.
 
 #### 3.4. G-Codes
@@ -136,7 +139,7 @@ Esta sección no esta muy explorada por parte de la cátedra y los alumnos, ya q
 
 Gran parte, por no decir todas las macros, ya existen o tienen algun parecido con otra, generalmente se buscan y se editan según necesidad. Recalco revisar bien la sección de [macros](https://www.klipper3d.org/Command_Templates.html) aunque no es muy explicativa, da una tentativa de inicio al mundo.
 
-Lo único realizado hasta el momento, son modificaciones de las funciones PAUSE, RESUME y CANCEL_PRINT, para que si en algún momento hay que pausar la impresión o si la impresora se queda sin filamento el cabezal se mueva a una coordenada segura, se apague el hotend y se mantenga prendida la cama por 10 dias, para que haya suficiente tiempo en cambiar filamente/resolver problema si llega a haber paros o cualquier inconveniente con la universidad que imposibilite ir.
+Lo único realizado hasta el momento, son modificaciones de las funciones PAUSE, RESUME y CANCEL_PRINT, para que si en algún momento hay que pausar la impresión o si la impresora se queda sin filamento el cabezal se mueva a una coordenada segura, se apague el hotend y se mantenga prendida la cama por 10 dias, para que haya suficiente tiempo en cambiar filamento/resolver problema si llega a haber paros o cualquier inconveniente con la universidad que imposibilite ir.
 
 Existen carpetas de macros como [esta](https://github.com/jschuh/klipper-macros) que se pueden implementar en cierto caso.
 
