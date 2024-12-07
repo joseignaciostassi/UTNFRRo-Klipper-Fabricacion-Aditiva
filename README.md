@@ -104,7 +104,7 @@ Desde la sección "Tool" en la parte que yo describo como "hotend panel" se debe
 ![hotend_panel](./images/hotend_panel.png)
 
 > [!NOTE]
-> Recordar de dejar la temperatura tal como se puso, ya que al reanudar la impresión, el movimiento para continuar es instanteo y la impresora automaticamente va a actualizar su temperatura a una previamente guardada desde que se quedó sin filamento o se realizó una pausa.
+> Recordar de dejar la temperatura tal como se puso, ya que al reanudar la impresión, el movimiento para continuar es instantáneo y la impresora automaticamente va a actualizar su temperatura a una previamente guardada desde que se quedó sin filamento o se realizó una pausa.
 
 > [!NOTE]
 > A futuro se podria hacer una macro de esto pero lo considero medio innecesario ya que desde la interfaz en general puedo ajustar la retracción/extrusión a medida según necesite.
@@ -145,7 +145,7 @@ Existen carpetas de macros como [esta](https://github.com/jschuh/klipper-macros)
 
 ## 5. Extras y trabajo a futuro
 
-Ante cualquier futura modificación o trabajo que requiera el conocimiento de los pines, pueden utilizar esta [imagen](pinmap_STM32F446.jpg) adjuntada en el repositorio; aunque generalmente la solución esta en algún foro, es útil para algún caso en específico.
+Ante cualquier futura modificación o trabajo que requiera el conocimiento de los pines, pueden utilizar esta [imagen](./images/pinmap_STM32F446.jpg) adjuntada en el repositorio; aunque generalmente la solución esta en algún foro, es útil para algún caso en específico.
 
 Cualquier modificación a este repositorio o dudas sobre Klipper, comunicarse con José Ignacio Stassi (joseignaciostassi@gmail.com).
 
