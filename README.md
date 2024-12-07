@@ -54,13 +54,13 @@ make
 
 Este proceso genera varios archivos en la carpeta /klipper/out, solo se copia el .bin y se pone en una sd en una carpeta llamada "update", se conecta la sd a la impresora, se prende y si todo salio correctamente, la pantalla queda con una barra de carga en la parte inferior quedando inutilizable.
 
+Se ingresa desde un navegador buscando "localhost" en caso de conexiones ethernet, si fuera por WiFi, a través de la dirección IPv4 que brinda el modem.
+
 ## 2. Configuración inicial
 
-Ya teniendo la impresora conectada, se accede a esta a través de la interfaz grafica instalada via navegador por medio de "localhost".
+Se accede a la pestaña de "Configuración" y se procede a modificar el archivo "printer.cfg"
 
-Dentro de ésta, se accede a la pestaña de "Configuración" y se procede a modificar el archivo "printer.cfg"
-
-La configuracion de la impresora depende pura y exclusivamente de la placa, el procesador y el modelo de la impresora. Con el pasar de los años se encuentran muchas configuraciones gratuitas disponibles en el repositorio de Klipper o en foros.
+La configuración de la impresora depende pura y exclusivamente de la placa, el procesador y el modelo de la impresora. Con el pasar de los años se encuentran muchas configuraciones gratuitas disponibles en el repositorio de Klipper o en foros.
 
 > [!WARNING]
 > NINGUNA DE LAS CONFIGURACIONES PRESENTA EL AJUSTE DEL Z_OFFSET, SE DEBE HACER POSTERIORMENTE, PUEDE VARIAR ENTRE IMPRESORA POR MÁS QUE SEAN LA MISMA.
@@ -74,7 +74,47 @@ Lo que se debe configurar dependiendo la impresora son las dimensiones, estas es
 
 Si se aprecia que todo se encuentra correctamente funcionando y no se presentan errores, Klipper esta listo para utilización.
 
-## 3. Calibración
+## 3. Uso básico
+
+Recomiendo revisar tanto documentación oficial de Klipper como de Fluidd en caso de no comprender algo.
+
+En general Klipper funciona por acciones, una vez que se ejecuta algo no se puede ejecutar otra cosa simultáneamente (aunque si se puede cancelar de una manera brusca "apagando" la impresora con el botón de "frenado" que previamente mencioné). Claro ejemplo de esto podría ser cuando quiero pausar una impresión, hasta que la acción no se termine, no voy a poder resumir o cancelar la impresión. 
+
+#### 3.1. Movimiento en la interfaz
+
+Una vez entrando a la interfaz de Fluidd que se utiliza para interactuar con la impresora, la vista será como la siguiente imagen.
+
+![main_screen](./images/main_screen.png)
+
+Desde la sección "Tool" se puede mover el cabezal a gusto, también hacer la acción de "home" para volver a la posicion básica (coordenadas 0, exceptuando el eje Z que va al medio).
+
+#### 3.2. Temperaturas
+
+Desde la sección "Thermals" se ajustan las temperaturas del extrusor y cama, respectivamente.
+
+Se utiliza generalmente para hacer al cambio de filamento. Cuando se inicia una impresión, automaticamente se pone la temperatura que este seteada en el G-Code.
+
+#### 3.3. Filamento
+
+> [!WARNING]
+> Para realizar cambio de filamento, ya sea por falta o cambio de color, se debe poner la temperatura del extrusor a minimante 170°C, con esto hecho, los botones de "Retract" y "Extrude" se activan.
+
+Desde la sección "Tool" en la parte que yo describo como "hotend panel" se debe poner la Extrude Lenght en alrededor de 120mm y presionar "Retract" para quitar el filamento dentro del hotend; posteriormente con el nuevo filamento ya preparado, se presiona "Extrude" y se coloca el filamento para que la impresora lo extruya.
+
+![hotend_panel](./images/hotend_panel.png)
+
+> [!NOTE]
+> A futuro se podria hacer una macro de esto pero lo considero medio innecesario ya que desde la interfaz en general puedo ajustar la retracción/extrusión a medida según necesite.
+
+#### 3.4. G-Codes
+
+En la seccion "Jobs" se pueden agregar los G-Codes que se utilizarán para imprimir desde el signo +.
+
+Desde acá se pueden iniciar las impresiones.
+
+![jobs_panel](./images/jobs_panel.png)
+
+#### 3.5. Calibración
 
 Por lo general esto se hace 1 sola vez, se puede hacer más veces en casos de mantenimiento o cuando se considere conveniente.
 
@@ -84,7 +124,7 @@ En el caso de las D01, no tienen sensor, por lo que se hace el "paper test" menc
 
 Para realizar el ajuste de tornillos, se debe configurar en la seccion [bed_screws] de la cfg de la impresora, las coordenadas XY de los tornillos; para obtener dichas coordenadas, se mueve el cabezal manualmente desde la interfaz de Klipper y se deja la punta del extrusor lo más cercano posible sobre la punta del tornillo en la cama, se repite el proceso con cada tornillo, se debe empezar por el de abajo-izquierda (screw1) y anotarlos en sentido antihorario.
 
-Posteriormente se ejecuta la acción BED_SCREWS_ADJUST desde consola o desde la seccion "tools" del cabezal en la interaz de Klipper y se realiza el "paper test" en cada tornillo ajustándolo para que cumpla con la condición de dicho test, que haya un fricción mínima, luego de ajustarlos se realiza el paper test en el centro de la cama con el comando Z_ENDSTOP_CALIBRATE.
+Posteriormente se ejecuta la acción BED_SCREWS_ADJUST desde consola o desde el botón "tools" dentro de la sección "Tool" y se realiza el "paper test" en cada tornillo ajustándolo para que cumpla con la condición de dicho test, que haya un fricción mínima, luego de ajustarlos se realiza el paper test en el centro de la cama con el comando Z_ENDSTOP_CALIBRATE.
 
 Para la X5SA, se puede hacer el paper test pero como ésta sí tiene un sensor, se realiza la calibración mediante PROBE_CALIBRATE (recordar acomodar bien los screws) en consola y posteriormente se hace un "paper test" en el centro.
 
